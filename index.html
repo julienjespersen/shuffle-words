@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Shuffle words</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+</head>
+
+<body>
+	<section class="section">
+		<div class="container">
+			<h1 class="title">
+				Shuffle words
+			</h1>
+			<div class="grid">
+				<p class="shuffle cell has-text-centered is-size-2"></p>
+			</div>
+			<div class="fixed-grid has-6-cols">
+				<form class="grid">
+					<input class="cell button" type="reset" value="Reset" />
+					<input class="cell is-col-span-4 input guess" type="text" placeholder="Link input" pattern="[a-z]+" />
+					<input class="cell button" type="submit" value="OK" />
+				</form>
+			</div>
+		</div>
+	</section>
+</body>
+<script defer>
+	var theChosenWord = '';
+	const guessInput = document.querySelector('input.guess');
+
+	document.addEventListener('DOMContentLoaded', () => {
+		resetWord();
+	});
+	const resetWord = () => {
+		theChosenWord = chooseARandomWord();
+		console.log(theChosenWord);
+		const theShuffledWord = document.querySelector('.shuffle');
+		theShuffledWord.textContent = shuffle(theChosenWord);
+		guessInput.value = '';
+	};
+
+	document.querySelector('form').addEventListener('submit', (event) => {
+		event.preventDefault();
+		evaluateGuess(event);
+	});
+	const shuffle = (str) => {
+		const arr = str.split('');
+		for (let i = arr.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[arr[i], arr[j]] = [arr[j], arr[i]];
+		}
+		return arr.join('');
+	};
+
+	const theShuffledWord = document.querySelectorAll('.shuffle');
+
+	const chooseARandomWord = () => {
+		const randomIndex = Math.floor(Math.random() * listOfWords.length);
+		return listOfWords[randomIndex];
+	};
+
+	const evaluateGuess = (event) => {
+		console.log(theChosenWord + ' ' + guessInput.value);
+		if (theChosenWord == guessInput.value) {
+			alert('Correct!');
+			resetWord();
+		} else {
+			alert('Incorrect!');
+		}
+	};
+
+</script>
+<script>
+	const listOfWords = [
+		'hello',
+		'world',
+		'javascript',
+		'programming',
+		'language',
+		'computer',
+		'algorithm',
+		'function',
+		'variable',
+		'constant',
+		'object',
+		'array',
+		'element',
+		'index',
+		'property',
+		'method',
+		'parameter',
+		'argument',
+		'condition',
+		'loop',
+		'while',
+		'do',
+		'for',
+		'break',
+		'continue',
+		'return',
+		'null',
+		'undefined',
+		'true',
+		'false',
+		'if',
+		'else',
+		'elseif',
+		'switch',
+		'case',
+		'default',
+		'function',
+		'arrow',
+		'anonymous',
+		'callback',
+		'promise',
+		'async',
+		'await',
+		'fetch',
+		'XMLHttpRequest',
+		'JSON',
+		'object',
+		'array',
+		'element',
+		'index',
+		'property',
+		'method',
+		'parameter',
+		'argument',
+		'condition',
+		'loop',
+		'while',
+		'do',
+		'for',
+		'break',
+		'continue',
+		'return',
+		'null',
+		'undefined',
+		'true',
+		'false',
+		'if',
+		'else',
+		'elseif',
+		'switch',
+		'case',
+		'default',
+		'function',
+		'arrow',
+		'anonymous',
+		'callback',
+		'promise',
+		'async',
+		'await',
+		'fetch',
+		'XMLHttpRequest',
+		'JSON',
+		'object',
+		'array',
+		'element',
+		'index',
+		'property',
+		'method',
+		'parameter',
+		'argument',
+		'condition',
+		'loop',
+		'while',
+		'do',
+		'for',
+		'break',
+		'continue',
+		'return',
+	]
+</script>
+</html>
