@@ -14,49 +14,52 @@
 			<h1 class="title">
 				Shuffle words
 			</h1>
-			<input type="range" min="1" max="10" value="10" /><input type="number" class="input is-info max-word-lenght-value" readonly />
+			<input type="range" min="1" max="10" value="6" /><input type="number" class="input is-info max-word-lenght-value" readonly />
 			<div class="grid">
 				<p class="shuffle cell has-text-centered is-size-2"></p>
 			</div>
 			<div class="fixed-grid has-6-cols">
 				<form class="grid">
-					<input class="cell button" type="reset" value="Reset" tabindex="3" />
+					<input class="cell button" type="reset" value="Reset" />
 					<input class="cell is-col-span-4 input guess" type="text" placeholder="type your guess here"
-						pattern="[a-z]+" tabindex="1" />
-					<input class="cell button" type="submit" value="OK" tabindex="2" />
+						autofocus />
+					<input class="cell button" type="submit" value="OK" />
 				</form>
 				<button class="cell button give-up">I give up</button>
 			</div>
-		</div>
-		<template id="result-template">
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-		</template>
-		<table class="table">
-			<thead>
-			  <th>
-				date
-				</th>		
-			  <th>
-				word
-			</th>		
-			  <th>
-				points
-			</th>	
-			</thead>
-			<tbody>
 
-			</tbody>
-		</table>	
+			<template id="result-template">
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</template>
+			<table class="table">
+				<thead>
+				  <th>
+					date
+					</th>		
+				  <th>
+					word
+				</th>		
+				  <th>
+					points
+				</th>	
+				</thead>
+				<tbody>
+	
+				</tbody>
+			</table>	
+	
+
+		</div>
 
 
 	</section>
 	<script>
 		var theChosenWord = '';
-		var maxWordLength = 10;
+		var maxWordLength = 6;
 		var totalScore = 0;
 		var score = 0;
 		const guessInput = document.querySelector('input.guess');
@@ -76,6 +79,7 @@
 			console.log(smallestWord + ' ' + longestWord);
 			maxLengthRange.min = smallestWord;
 			maxLengthRange.max = longestWord;
+			maxLengthRange.value = maxWordLength;
 		});
 		const resetWord = () => {
 			theChosenWord = chooseARandomWord();
@@ -129,11 +133,15 @@
 			const template = document.querySelector('#result-template');
 			const clone = template.content.cloneNode(true);
 			const tr = clone.querySelector('tr');
+			
 			const tds = tr.querySelectorAll('td');
 			const event = new Date();
 			tds[0].textContent = event.toISOString().substring(0, 10);
+			if (!guessed) tds[0].classList.add('has-text-danger');
 			tds[1].textContent = word;
+			if (!guessed) tds[1].classList.add('has-text-danger');
 			tds[2].textContent = score;
+			if (!guessed) tds[2].classList.add('has-text-danger');
 			document.querySelector('tbody').prepend(tr);
 		}
 
@@ -144,7 +152,7 @@
 				resetWord();
 			} else {
 				rate(false);
-				alert('Incorrect!');
+				resetWord();
 			}
 		};
 	</script>
