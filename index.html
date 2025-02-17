@@ -25,19 +25,41 @@
 						pattern="[a-z]+" tabindex="1" />
 					<input class="cell button" type="submit" value="OK" tabindex="2" />
 				</form>
+				<button class="cell button give-up">I give up</button>
 			</div>
 		</div>
-		<div class="fixed-grid has-6-cols">
-			<div class="grid">
-				<pre class="result cell is-col-start-2 is-col-span-4"></pre>
-			</div>
-		</div>
+		<template id="result-template">
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</template>
+		<table class="table">
+			<thead>
+			  <th>
+				date
+				</th>		
+			  <th>
+				word
+			</th>		
+			  <th>
+				points
+			</th>	
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>	
+
+
 	</section>
 	<script>
 		var theChosenWord = '';
 		var maxWordLength = 10;
+		var totalScore = 0;
+		var score = 0;
 		const guessInput = document.querySelector('input.guess');
-		const resultList = document.querySelector('.result');
 		const maxLengthRange = document.querySelector('input[type="range"]');
 		const maxWordLengthValue = document.querySelector('.max-word-lenght-value');
 		maxWordLengthValue.value = maxWordLength;
@@ -97,13 +119,31 @@
 			}
 			return listOfWords[randomIndex];
 		};
+		const rate = (guessed = false) => {
+			score = guessed ? 1 * theChosenWord.length : -1 * theChosenWord.length;
+			totalScore += score;
+			console.log('score: ' + score);
+			addScoreBoard(theChosenWord, guessed);
+		}
+		const addScoreBoard = (word, guessed) => {
+			const template = document.querySelector('#result-template');
+			const clone = template.content.cloneNode(true);
+			const tr = clone.querySelector('tr');
+			const tds = tr.querySelectorAll('td');
+			const event = new Date();
+			tds[0].textContent = event.toISOString().substring(0, 10);
+			tds[1].textContent = word;
+			tds[2].textContent = score;
+			document.querySelector('tbody').prepend(tr);
+		}
 
 		const evaluateGuess = (event) => {
 			console.log(theChosenWord + ' ' + guessInput.value);
 			if (theChosenWord == guessInput.value) {
-				resultList.textContent = theChosenWord + '\n' + resultList.textContent;
+				rate(true);
 				resetWord();
 			} else {
+				rate(false);
 				alert('Incorrect!');
 			}
 		};
