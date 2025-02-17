@@ -4,28 +4,120 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
 	<title>Shuffle words</title>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+	<style>
+		:root {
+			font-size: 12pt;
+			--bulma-primary-h: 4deg;
+  			--bulma-primary-s: 68%;
+  			--bulma-primary-l: 53%;
+
+			--bulma-family-primary: Lato, Inter, SF Pro, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, Helvetica, Arial, sans-serif;
+		}
+
+	</style>
 </head>
 
 <body>
+	<nav class="navbar" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a class="navbar-item" href="#">
+				<h1>Shuffle words </h1>
+			</a>
+
+			<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+				data-target="navbarBasicExample">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
+		</div>
+
+		<div id="navbarBasicExample" class="navbar-menu">
+			<div class="navbar-start">
+				<a class="navbar-item">
+					Home
+				</a>
+				<a class="navbar-item">
+					Documentation
+				</a>
+				<div class="navbar-item has-dropdown is-hoverable">
+					<a class="navbar-link">
+						More
+					</a>
+					<div class="navbar-dropdown">
+						<a class="navbar-item">
+							About
+						</a>
+						<a class="navbar-item is-selected">
+							Jobs
+						</a>
+						<a class="navbar-item">
+							Contact
+						</a>
+						<hr class="navbar-divider">
+						<a class="navbar-item">
+							Report an issue
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="navbar-end">
+				<div class="navbar-item">
+					<div class="buttons">
+						<a class="button is-primary">
+							<strong>Sign up</strong>
+						</a>
+						<a class="button is-light">
+							Log in
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<section class="hero is-small">
+		<div class="hero-body has-text-centered">
+			<p class="title total-score is-size-1 is-family-monospace">0</p>
+			<p>your score</p>
+		</div>
+	</section>
 	<section class="section">
 		<div class="container">
-			<h1 class="title">
-				Shuffle words
-			</h1>
-			<input type="range" min="1" max="10" value="6" /><input type="number" class="input is-info max-word-lenght-value" readonly />
+
 			<div class="grid">
 				<p class="shuffle cell has-text-centered is-size-2"></p>
 			</div>
 			<div class="fixed-grid has-6-cols">
 				<form class="grid">
-					<input class="cell button" type="reset" value="Reset" />
+					<button class="cell button" type="reset" value="Reset"><span class="material-symbols-outlined">
+						close
+						</span>
+						</button>
 					<input class="cell is-col-span-4 input guess" type="text" placeholder="type your guess here"
 						autofocus />
-					<input class="cell button" type="submit" value="OK" />
+					<button class="cell button" type="submit" value="OK"><span class="material-symbols-outlined">
+						check
+						</span>
+						</button>
 				</form>
-				<button class="cell button give-up">I give up</button>
+			</div>
+			<div class="fixed-grid has-6-cols">
+				<div class="grid">
+					<label class="cell is-col-span-5 has-text-right" for="max-word-lenght-value">Set max word length from <span class="min-length-info">0</span> to <span class="max-length-info">0</span>:
+					</label>
+					<input class="input is-info is-small cell is-col-span-1" id="max-word-lenght-value" type="number" min="1" max="10" value="5" />
+				</div>
 			</div>
 
 			<template id="result-template">
@@ -37,34 +129,60 @@
 			</template>
 			<table class="table">
 				<thead>
-				  <th>
-					date
-					</th>		
-				  <th>
-					word
-				</th>		
-				  <th>
-					points
-				</th>	
+					<th>
+						date
+					</th>
+					<th>
+						word
+					</th>
+					<th>
+						points
+					</th>
 				</thead>
 				<tbody>
-	
+
 				</tbody>
-			</table>	
-	
+			</table>
+
 
 		</div>
 
 
 	</section>
 	<script>
+		// bulma navbar burger
+		document.addEventListener('DOMContentLoaded', () => {
+
+			// Get all "navbar-burger" elements
+			const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+			// Add a click event on each of them
+			$navbarBurgers.forEach(el => {
+				el.addEventListener('click', () => {
+
+					// Get the target from the "data-target" attribute
+					const target = el.dataset.target;
+					const $target = document.getElementById(target);
+
+					// Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+					el.classList.toggle('is-active');
+					$target.classList.toggle('is-active');
+
+				});
+			});
+
+		});
+	</script>
+	<script>
 		var theChosenWord = '';
 		var maxWordLength = 6;
 		var totalScore = 0;
 		var score = 0;
 		const guessInput = document.querySelector('input.guess');
-		const maxLengthRange = document.querySelector('input[type="range"]');
-		const maxWordLengthValue = document.querySelector('.max-word-lenght-value');
+		const maxWordLengthValue = document.querySelector('#max-word-lenght-value');
+		const totalScoreDsiplay = document.querySelector('.total-score');
+		const minLengthInfo = document.querySelector('.min-length-info');
+		const maxLengthInfo = document.querySelector('.max-length-info');
 		maxWordLengthValue.value = maxWordLength;
 
 
@@ -77,9 +195,9 @@
 				return word.length > acc.length ? word : acc;
 			}, listOfWords[0]).length;
 			console.log(smallestWord + ' ' + longestWord);
-			maxLengthRange.min = smallestWord;
-			maxLengthRange.max = longestWord;
-			maxLengthRange.value = maxWordLength;
+			maxWordLengthValue.min = minLengthInfo.textContent = smallestWord;
+			maxWordLengthValue.max = maxLengthInfo.textContent = longestWord;
+			maxWordLengthValue.value = maxWordLength;
 		});
 		const resetWord = () => {
 			theChosenWord = chooseARandomWord();
@@ -88,9 +206,9 @@
 			theShuffledWord.textContent = shuffle(theChosenWord);
 			guessInput.value = '';
 		};
-		maxLengthRange.addEventListener('input', (event) => {
+		maxWordLengthValue.addEventListener('change', (event) => {
 			console.log(event.target.value);
-			maxWordLength = maxWordLengthValue.value = event.target.value;
+			maxWordLength =  event.target.value;
 			resetWord();
 		});
 
@@ -133,7 +251,7 @@
 			const template = document.querySelector('#result-template');
 			const clone = template.content.cloneNode(true);
 			const tr = clone.querySelector('tr');
-			
+
 			const tds = tr.querySelectorAll('td');
 			const event = new Date();
 			tds[0].textContent = event.toISOString().substring(0, 10);
@@ -143,6 +261,8 @@
 			tds[2].textContent = score;
 			if (!guessed) tds[2].classList.add('has-text-danger');
 			document.querySelector('tbody').prepend(tr);
+			// update total score
+			totalScoreDsiplay.textContent = totalScore;
 		}
 
 		const evaluateGuess = (event) => {
