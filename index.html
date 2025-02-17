@@ -4,6 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Shuffle words is a free simple game where you have to guess the word from the shuffled letters.">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="stylesheet"
@@ -16,13 +17,11 @@
 	<style>
 		:root {
 			font-size: 12pt;
-			--bulma-primary-h: 4deg;
+			--bulma-primary-h: 180deg;
   			--bulma-primary-s: 68%;
   			--bulma-primary-l: 53%;
-
 			--bulma-family-primary: Lato, Inter, SF Pro, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, Helvetica, Arial, sans-serif;
 		}
-
 	</style>
 </head>
 
@@ -32,7 +31,6 @@
 			<a class="navbar-item" href="#">
 				<h1>Shuffle words </h1>
 			</a>
-
 			<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
 				data-target="navbarBasicExample">
 				<span aria-hidden="true"></span>
@@ -41,7 +39,6 @@
 				<span aria-hidden="true"></span>
 			</a>
 		</div>
-
 		<div id="navbarBasicExample" class="navbar-menu">
 			<div class="navbar-start">
 			</div>
@@ -59,24 +56,23 @@
 			<p>your score</p>
 		</div>
 	</section>
-	<section class="section">
+	<section class="section pt-0">
 		<div class="container">
-
 			<div class="grid">
-				<p class="shuffle cell has-text-centered is-size-2"></p>
+				<p class="shuffle cell is-size-2 has-text-centered has-text-white"></p>
 			</div>
 			<div class="fixed-grid has-6-cols">
 				<form class="grid">
 					<button class="cell button" type="reset" value="Reset"><span class="material-symbols-outlined">
 						close
 						</span>
-						</button>
-					<input class="cell is-col-span-4 input guess" type="text" placeholder="type your guess here"
+					</button>
+					<input class="cell is-col-span-4 input is-primary guess" type="text" placeholder="type your guess here"
 						autofocus />
 					<button class="cell button" type="submit" value="OK"><span class="material-symbols-outlined">
 						check
 						</span>
-						</button>
+					</button>
 				</form>
 			</div>
 			<div class="fixed-grid has-6-cols">
@@ -92,6 +88,7 @@
 					<td></td>
 					<td></td>
 					<td></td>
+					<td></td>
 				</tr>
 			</template>
 			<table class="table">
@@ -100,7 +97,10 @@
 						date
 					</th>
 					<th>
-						word
+						your word
+					</th>
+					<th>
+						correct word
 					</th>
 					<th>
 						points
@@ -110,11 +110,7 @@
 
 				</tbody>
 			</table>
-
-
 		</div>
-
-
 	</section>
 	<script>
 		// bulma navbar burger
@@ -150,6 +146,7 @@
 		const totalScoreDsiplay = document.querySelector('.total-score');
 		const minLengthInfo = document.querySelector('.min-length-info');
 		const maxLengthInfo = document.querySelector('.max-length-info');
+		const theShuffledWord = document.querySelectorAll('.shuffle');
 		maxWordLengthValue.value = maxWordLength;
 
 
@@ -199,7 +196,6 @@
 			return shuffledStr;
 		};
 
-		const theShuffledWord = document.querySelectorAll('.shuffle');
 
 		const chooseARandomWord = () => {
 			var randomIndex = Math.floor(Math.random() * listOfWords.length);
@@ -223,10 +219,12 @@
 			const event = new Date();
 			tds[0].textContent = event.toISOString().substring(0, 10);
 			if (!guessed) tds[0].classList.add('has-text-danger');
-			tds[1].textContent = word;
+			tds[1].textContent = guessInput.value;
 			if (!guessed) tds[1].classList.add('has-text-danger');
-			tds[2].textContent = score;
-			if (!guessed) tds[2].classList.add('has-text-danger');
+			tds[2].textContent = word;
+			if (!guessed) tds[2].classList.add('has-text-success');
+			tds[3].textContent = score;
+			if (!guessed) tds[3].classList.add('has-text-danger');
 			document.querySelector('tbody').prepend(tr);
 			// update total score
 			totalScoreDsiplay.textContent = totalScore;
@@ -234,7 +232,7 @@
 
 		const evaluateGuess = (event) => {
 			console.log(theChosenWord + ' ' + guessInput.value);
-			if (theChosenWord == guessInput.value) {
+			if (theChosenWord.toUpperCase() === guessInput.value.toUpperCase()) {
 				rate(true);
 				resetWord();
 			} else {
