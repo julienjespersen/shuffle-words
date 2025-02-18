@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description"
 		content="Shuffle words is a free simple game where you have to guess the word from the shuffled letters.">
+	<link rel="icon" href="favicon.svg" />
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="stylesheet"
@@ -134,7 +135,7 @@
 	<footer class="footer">
 		<div class="content has-text-centered">
 		  <p>
-			By using this site you agree to the <a href="#">terms and conditions</a> and <a href="#">privacy policy</a>
+			This software is provided as is. We use analytics to meter users’ behaviour. By using this website you agree with these statements.</a>
 		  </p>
 		</div>
 	</footer>	
@@ -163,8 +164,9 @@
 		});
 	</script>
 	<script>
+
 		var theChosenWord = '';
-		var maxWordLength = 6;
+		var maxWordLength = localStorage.getItem('maxWordLength') || 6;
 		var totalScore = 0;
 		var score = 0;
 		const guessInput = document.querySelector('input.guess');
@@ -199,6 +201,8 @@
 		maxWordLengthValue.addEventListener('change', (event) => {
 			console.log(event.target.value);
 			maxWordLength = event.target.value;
+			localStorage.setItem('maxWordLength', maxWordLength);
+
 			resetWord();
 		});
 
