@@ -100,6 +100,7 @@
 				<div class="grid">
 					<div class="cell is-col-start-1	is-col-span-4">
 						<h2 class="title is-4 has-text-centered">Score board</h2>
+						<button class="clear-store button is-secondary">clear</button>
 						<template id="result-template">
 							<tr>
 								<td></td>
@@ -164,10 +165,11 @@
 		});
 	</script>
 	<script>
-
+		const defaultMaxWordLenght = 6;
 		var theChosenWord = '';
-		var maxWordLength = localStorage.getItem('maxWordLength') || 6;
-		var totalScore = 0;
+		var maxWordLength = parseInt(localStorage.getItem('maxWordLength')) || defaultMaxWordLenght;
+		var totalScore = parseInt(localStorage.getItem('totalScore')) || 0;
+		var oneEval = {date: null, guess: null, word: null, score: null};
 		var score = 0;
 		const guessInput = document.querySelector('input.guess');
 		const maxWordLengthValue = document.querySelector('#max-word-lenght-value');
@@ -175,11 +177,18 @@
 		const minLengthInfo = document.querySelector('.min-length-info');
 		const maxLengthInfo = document.querySelector('.max-length-info');
 		const theShuffledWord = document.querySelectorAll('.shuffle');
+		const clearStoreBtn = document.querySelectorAll('.clear-store');
 		maxWordLengthValue.value = maxWordLength;
 
 
 		document.addEventListener('DOMContentLoaded', () => {
 			resetWord();
+			calculateWordLength(listOfWords);
+			totalScoreDsiplay.textContent = totalScore;
+			populateTable();
+		});
+
+		const calculateWordLength = (listOfWords) => {
 			const smallestWord = listOfWords.reduce((acc, word) => {
 				return word.length < acc.length ? word : acc;
 			}, listOfWords[0]).length;
@@ -190,7 +199,8 @@
 			maxWordLengthValue.min = minLengthInfo.textContent = smallestWord;
 			maxWordLengthValue.max = maxLengthInfo.textContent = longestWord;
 			maxWordLengthValue.value = maxWordLength;
-		});
+		};
+
 		const resetWord = () => {
 			theChosenWord = chooseARandomWord();
 			console.log(theChosenWord);
@@ -204,6 +214,20 @@
 			localStorage.setItem('maxWordLength', maxWordLength);
 
 			resetWord();
+		});
+
+		clearStoreBtn.forEach(btn => {
+			btn.addEventListener('click', () => {
+				document.querySelector('tbody').innerHTML = '';
+				totalScore = 0;
+				totalScoreDsiplay.textContent = totalScore;
+				maxWordLength = defaultMaxWordLenght;
+				localStorage.clear();
+				oneEval = {date: null, guess: null, word: null, score: null};
+
+
+
+			});
 		});
 
 		document.querySelector('form').addEventListener('submit', (event) => {
@@ -235,32 +259,48 @@
 			return listOfWords[randomIndex];
 		};
 		const rate = (guessed = false) => {
-			score = guessed ? 1 * theChosenWord.length : -1 * theChosenWord.length;
-			totalScore += score;
-			console.log('score: ' + score);
-			addScoreBoard(theChosenWord, guessed);
+			score = guessed ? 1 * oneEval.word.length : -1 * oneEval.word.length;
+			oneEval.score = score;
+			totalScore += oneEval.score;
+			console.log('totalScore: ' + totalScore);
+			addScoreBoard(guessed, oneEval.date, oneEval.guess, oneEval.word, score);
 		}
-		const addScoreBoard = (word, guessed) => {
+		const addScoreBoard = (guessed, date, aWord, theWord, score) => {
 			const template = document.querySelector('#result-template');
 			const clone = template.content.cloneNode(true);
 			const tr = clone.querySelector('tr');
 
 			const tds = tr.querySelectorAll('td');
-			const event = new Date();
-			tds[0].textContent = event.toISOString().substring(0, 10);
+			tds[0].textContent = date.substring(0, 10);
 			if (!guessed) tds[0].classList.add('has-text-danger');
-			tds[1].textContent = guessInput.value;
+			tds[1].textContent = aWord;
 			if (!guessed) tds[1].classList.add('has-text-danger');
-			tds[2].textContent = word;
+			tds[2].textContent = theWord;
 			if (!guessed) tds[2].classList.add('has-text-success');
 			tds[3].textContent = score;
 			if (!guessed) tds[3].classList.add('has-text-danger');
 			document.querySelector('tbody').prepend(tr);
-			// update total score
-			totalScoreDsiplay.textContent = totalScore;
+
+		}
+		const pushOneEval = (eval) => {
+			let evals = JSON.parse(localStorage.getItem('evals')) || [];
+			evals.push(eval);
+			localStorage.setItem('evals', JSON.stringify(evals));
+		}
+		const getEvals = () => {
+			return JSON.parse(localStorage.getItem('evals')) || [];
+		}
+		const populateTable = () => {
+			const evals = getEvals();
+			evals.forEach(eval => {
+				addScoreBoard((eval.word == eval.guess ? true : false), eval.date, eval.word, eval.guess, eval.score);
+			});
 		}
 
 		const evaluateGuess = (event) => {
+			oneEval.date = new Date().toISOString();
+			oneEval.guess = guessInput.value;
+			oneEval.word = theChosenWord;
 			console.log(theChosenWord + ' ' + guessInput.value);
 			if (theChosenWord.toUpperCase() === guessInput.value.toUpperCase()) {
 				rate(true);
@@ -269,6 +309,11 @@
 				rate(false);
 				resetWord();
 			}
+			pushOneEval(oneEval);
+			// update total score
+			totalScoreDsiplay.textContent = totalScore;
+			localStorage.setItem('totalScore', totalScore);
+
 		};
 	</script>
 	<script>
