@@ -212,21 +212,18 @@
 			console.log(event.target.value);
 			maxWordLength = event.target.value;
 			localStorage.setItem('maxWordLength', maxWordLength);
-
 			resetWord();
 		});
 
 		clearStoreBtn.forEach(btn => {
 			btn.addEventListener('click', () => {
 				document.querySelector('tbody').innerHTML = '';
+				localStorage.removeItem('evals');
+				localStorage.removeItem('totalScore');
 				totalScore = 0;
 				totalScoreDsiplay.textContent = totalScore;
 				maxWordLength = defaultMaxWordLenght;
-				localStorage.clear();
 				oneEval = {date: null, guess: null, word: null, score: null};
-
-
-
 			});
 		});
 
