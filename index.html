@@ -23,7 +23,7 @@
 			--bulma-primary-l: 53%;
 			--bulma-family-primary: Lato, Inter, SF Pro, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, Helvetica, Arial, sans-serif;
 		}
-		.shuffle {
+		#shuffle {
 			letter-spacing: .5rem;
 		}
 		form {
@@ -74,7 +74,7 @@
 	<section class="section pt-0">
 		<div class="container">
 			<div class="grid content">
-				<p class="shuffle cell title is-1 has-text-centered"></p>
+				<p id="shuffle" class="cell title is-1 has-text-centered"></p>
 			</div>
 			<div class="fixed-grid has-6-cols">
 				<form class="grid">
@@ -174,6 +174,7 @@
 	</script>
 	<script>
 		const defaultMaxWordLenght = 6;
+		const defaultFeedbackTime = 1200;
 		var theChosenWord = '';
 		var maxWordLength = parseInt(localStorage.getItem('maxWordLength')) || defaultMaxWordLenght;
 		var totalScore = parseInt(localStorage.getItem('totalScore')) || 0;
@@ -184,12 +185,16 @@
 		const totalScoreDsiplay = document.querySelector('.total-score');
 		const minLengthInfo = document.querySelector('.min-length-info');
 		const maxLengthInfo = document.querySelector('.max-length-info');
-		const theShuffledWord = document.querySelectorAll('.shuffle');
+		const theShuffledWord = document.querySelector('#shuffle');
 		const clearStoreBtn = document.querySelectorAll('.clear-store');
+		const theForm = document.querySelector('form');
 		maxWordLengthValue.value = maxWordLength;
 
 
+
+
 		document.addEventListener('DOMContentLoaded', () => {
+			replaceSubmit();
 			resetWord();
 			calculateWordLength(listOfWords);
 			totalScoreDsiplay.textContent = totalScore;
@@ -212,7 +217,6 @@
 		const resetWord = () => {
 			theChosenWord = chooseARandomWord();
 			console.log(theChosenWord);
-			const theShuffledWord = document.querySelector('.shuffle');
 			theShuffledWord.textContent = shuffle(theChosenWord);
 			guessInput.value = '';
 		};
@@ -235,10 +239,13 @@
 			});
 		});
 
-		document.querySelector('form').addEventListener('submit', (event) => {
-			event.preventDefault();
-			evaluateGuess(event);
-		});
+		const replaceSubmit = () => {
+			theForm.addEventListener('submit', (event) => {
+				event.preventDefault();
+				evaluateGuess(event);
+			}, false);
+		};
+			
 		const shuffle = (str) => {
 			let i = 10;
 			const arr = str.split('');
@@ -254,7 +261,20 @@
 			}
 			return shuffledStr;
 		};
-
+		const showSuccess = () => {
+			theShuffledWord.classList.add('has-text-success');
+			theShuffledWord.textContent = oneEval.word;
+			setTimeout(() => {
+				theShuffledWord.classList.remove('has-text-success');
+			}, defaultFeedbackTime);
+		}
+		const showFailure = () => {
+			theShuffledWord.classList.add('has-text-danger');
+			theShuffledWord.textContent = oneEval.word;
+			setTimeout(() => {
+				theShuffledWord.classList.remove('has-text-danger');
+			}, defaultFeedbackTime);
+		}
 
 		const chooseARandomWord = () => {
 			var randomIndex = Math.floor(Math.random() * listOfWords.length);
@@ -309,15 +329,22 @@
 			console.log(theChosenWord + ' ' + guessInput.value);
 			if (theChosenWord.toUpperCase() === guessInput.value.toUpperCase()) {
 				rate(true);
-				resetWord();
+				showSuccess();
 			} else {
 				rate(false);
-				resetWord();
+				showFailure();
 			}
 			pushOneEval(oneEval);
+
 			// update total score
 			totalScoreDsiplay.textContent = totalScore;
 			localStorage.setItem('totalScore', totalScore);
+			setTimeout(() => {
+				console.log("reset word");
+				resetWord();
+			}, defaultFeedbackTime);
+
+
 
 		};
 	</script>
