@@ -23,6 +23,12 @@
 			--bulma-primary-l: 53%;
 			--bulma-family-primary: Lato, Inter, SF Pro, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, Helvetica, Arial, sans-serif;
 		}
+		.shuffle {
+			letter-spacing: .5rem;
+		}
+		form {
+			align-items: end;
+		}
 	</style>
 </head>
 <!-- Google tag (gtag.js) -->
@@ -72,15 +78,17 @@
 			</div>
 			<div class="fixed-grid has-6-cols">
 				<form class="grid">
-					<button class="cell button has-text-warning" type="reset" value="Reset"><span
-							class="material-symbols-outlined">
+					<button id="reset" title="clear your input" class="cell button has-text-warning" type="reset" value="Reset">
+						<span class="material-symbols-outlined">
 							close
 						</span>
 					</button>
-					<input class="cell is-col-span-4 input is-primary guess" type="text"
-						placeholder="type your guess here" autofocus />
-					<button class="cell button has-text-success" type="submit" value="OK"><span
-							class="material-symbols-outlined">
+					<label class="cell is-col-span-4  has-text-centered" for="guess">
+						Guess the word
+						<input id="guess" type="text" class="input is-primary is-medium" placeholder="type your guess here" autofocus />
+					</label>
+					<button id="ok" title="submit your guess" class="cell button has-text-success" type="submit" value="OK">
+						<span class="material-symbols-outlined">
 							check
 						</span>
 					</button>
@@ -171,7 +179,7 @@
 		var totalScore = parseInt(localStorage.getItem('totalScore')) || 0;
 		var oneEval = {date: null, guess: null, word: null, score: null};
 		var score = 0;
-		const guessInput = document.querySelector('input.guess');
+		const guessInput = document.querySelector('#guess');
 		const maxWordLengthValue = document.querySelector('#max-word-lenght-value');
 		const totalScoreDsiplay = document.querySelector('.total-score');
 		const minLengthInfo = document.querySelector('.min-length-info');
