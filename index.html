@@ -340,10 +340,10 @@
 
 		const evaluateGuess = (event) => {
 			oneEval.date = new Date().toISOString();
-			oneEval.guess = guessInput.value;
+			oneEval.guess = guessInput.value.trim();
 			oneEval.word = theChosenWord;
-			console.log(theChosenWord + ' ' + guessInput.value);
-			if (theChosenWord.toUpperCase() === guessInput.value.toUpperCase()) {
+			// console.log(theChosenWord + ' ' + guessInput.value);
+			if (oneEval.word.toUpperCase() === oneEval.guess.toUpperCase()) {
 				rate(true);
 				showSuccess();
 			} else {
