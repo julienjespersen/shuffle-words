@@ -262,6 +262,7 @@
 			return shuffledStr;
 		};
 		const showSuccess = () => {
+			guessInput.value = '';
 			theShuffledWord.classList.add('has-text-success');
 			theShuffledWord.textContent = oneEval.word;
 			setTimeout(() => {
@@ -269,6 +270,7 @@
 			}, defaultFeedbackTime);
 		}
 		const showFailure = () => {
+			guessInput.value = '';
 			theShuffledWord.classList.add('has-text-danger');
 			theShuffledWord.textContent = oneEval.word;
 			setTimeout(() => {
