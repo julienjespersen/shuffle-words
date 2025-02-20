@@ -67,7 +67,7 @@
 	</nav>
 	<section class="hero is-small">
 		<div class="hero-body has-text-centered">
-			<p class="title total-score is-size-1 is-family-monospace mb-0">0</p>
+			<p class="title total-score is-size-3 is-family-monospace mb-0">0</p>
 			<p class="mt-0 is-size-7">your score</p>
 		</div>
 	</section>
@@ -78,15 +78,15 @@
 			</div>
 			<div class="fixed-grid has-6-cols">
 				<form class="grid">
+					<label class="instructions cell is-col-span-6 is-size-6 has-text-centered" for="guess">
+						Guess the word above
+					</label>
 					<button id="reset" title="clear your input" class="cell button has-text-warning" type="reset" value="Reset">
 						<span class="material-symbols-outlined">
 							close
 						</span>
 					</button>
-					<label class="cell is-col-span-4  has-text-centered" for="guess">
-						Guess the word
-						<input id="guess" type="text" class="input is-primary is-medium" placeholder="type your guess here" autocomplete="off" autofocus />
-					</label>
+						<input id="guess" type="text" class="input cell is-col-span-4 is-primary is-medium" placeholder="type your guess here" autocomplete="off" autofocus />
 					<button id="ok" title="submit your guess" class="cell button has-text-success" type="submit" value="OK">
 						<span class="material-symbols-outlined">
 							check
@@ -188,6 +188,7 @@
 		const theShuffledWord = document.querySelector('#shuffle');
 		const clearStoreBtn = document.querySelectorAll('.clear-store');
 		const theForm = document.querySelector('form');
+		const instructions = document.querySelector('.instructions');
 		maxWordLengthValue.value = maxWordLength;
 
 
@@ -200,6 +201,11 @@
 			totalScoreDsiplay.textContent = totalScore;
 			populateTable();
 		});
+
+		const expFunc = (x) => {
+  			return Math.pow(x, 2);
+		}
+
 
 		const calculateWordLength = (listOfWords) => {
 			const smallestWord = listOfWords.reduce((acc, word) => {
@@ -219,6 +225,7 @@
 			console.log(theChosenWord);
 			theShuffledWord.textContent = shuffle(theChosenWord);
 			guessInput.value = '';
+			instructions.textContent = 'Guess the word above for ' + expFunc(theChosenWord.length) + ' points!';
 		};
 		maxWordLengthValue.addEventListener('change', (event) => {
 			console.log(event.target.value);
@@ -263,18 +270,24 @@
 		};
 		const showSuccess = () => {
 			guessInput.value = '';
+			guessInput.setAttribute('disabled', 'disabled');
 			theShuffledWord.classList.add('has-text-success');
 			theShuffledWord.textContent = oneEval.word;
 			setTimeout(() => {
 				theShuffledWord.classList.remove('has-text-success');
+				guessInput.removeAttribute('disabled');
+				guessInput.focus();
 			}, defaultFeedbackTime);
 		}
 		const showFailure = () => {
 			guessInput.value = '';
+			guessInput.setAttribute('disabled', 'disabled');
 			theShuffledWord.classList.add('has-text-danger');
 			theShuffledWord.textContent = oneEval.word;
 			setTimeout(() => {
 				theShuffledWord.classList.remove('has-text-danger');
+				guessInput.removeAttribute('disabled');
+				guessInput.focus();
 			}, defaultFeedbackTime);
 		}
 
@@ -286,10 +299,11 @@
 			return listOfWords[randomIndex];
 		};
 		const rate = (guessed = false) => {
-			score = guessed ? 1 * oneEval.word.length : -1 * oneEval.word.length;
+			score = guessed ? 1 * expFunc(oneEval.word.length) : -1 * expFunc(oneEval.word.length);
+			// score = guessed ? 1 * oneEval.word.length : -1 * oneEval.word.length;
 			oneEval.score = score;
 			totalScore += oneEval.score;
-			console.log('totalScore: ' + totalScore);
+			console.log('score: ', score,' totalScore: ', totalScore);
 			addScoreBoard(guessed, oneEval.date, oneEval.guess, oneEval.word, score);
 		}
 		const addScoreBoard = (guessed, date, aWord, theWord, score) => {
