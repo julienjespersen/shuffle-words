@@ -141,11 +141,15 @@
 			</div>
 		</div>
 	</section>
-	<footer class="footer">
-		<div class="content has-text-centered">
+	<footer class="footer fixed-grid has-4-cols">
+		<div class="grid">
+		<img class="cell" src="https://app.greenweb.org/api/v3/greencheckimage/ezykyu.com?nocache=true" alt="This website runs on green hosting - verified by thegreenwebfoundation.org" width="200px" height="95px">
+
+		<div class="cell is-col-span-3 content has-text-centered">
 		  <p>
 			This software is provided as is. We use analytics to meter users’ behaviour. By using this website you agree with these statements.</a>
 		  </p>
+		</div>
 		</div>
 	</footer>	
 	<script>
@@ -356,7 +360,7 @@
 			totalScoreDsiplay.textContent = totalScore;
 			localStorage.setItem('totalScore', totalScore);
 			setTimeout(() => {
-				console.log("reset word");
+				console.log('reset word');
 				resetWord();
 			}, defaultFeedbackTime);
 
