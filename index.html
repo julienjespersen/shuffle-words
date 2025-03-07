@@ -67,9 +67,19 @@
 		</div>
 	</nav>
 	<section class="hero is-small">
-		<div class="hero-body has-text-centered">
-			<p class="title total-score is-size-3 is-family-monospace mb-0">0</p>
-			<p class="mt-0 is-size-7">your score</p>
+		<div class="fixed-grid has-6-cols">
+		<div class="grid hero-body has-text-centered">
+			<span id="thumb-down" class="cell py-1 is-col-start-2 has-text-danger is-invisible material-symbols-outlined">
+				thumb_down
+			</span>
+			<div class="cell is-col-span-2">
+				<p class="title total-score is-size-3 is-family-monospace mb-0">0</p>
+				<p class="mt-0 is-size-7">your score</p>
+			</div>
+			<span id="thumb-up" class="cell py-1 has-text-success is-invisible material-symbols-outlined">
+				thumb_up
+			</span>
+		</div>
 		</div>
 	</section>
 	<section class="section pt-0">
@@ -87,7 +97,7 @@
 							close
 						</span>
 					</button>
-						<input id="guess" type="text" class="input cell is-col-span-4 is-primary is-medium" placeholder="type your guess here" autocomplete="off" autofocus />
+					<input id="guess" type="text" class="input cell is-col-span-4 is-primary is-medium" placeholder="type your guess here" autocomplete="off" autofocus />
 					<button id="ok" title="submit your guess" class="cell button has-text-success" type="submit" value="OK">
 						<span class="material-symbols-outlined">
 							check
@@ -194,6 +204,8 @@
 		const clearStoreBtn = document.querySelectorAll('.clear-store');
 		const theForm = document.querySelector('form');
 		const instructions = document.querySelector('.instructions');
+		const thumb_up = document.querySelector('#thumb-up');
+		const thumb_down = document.querySelector('#thumb-down');
 		maxWordLengthValue.value = maxWordLength;
 
 
@@ -278,9 +290,11 @@
 			guessInput.setAttribute('disabled', 'disabled');
 			theShuffledWord.classList.add('has-text-success');
 			theShuffledWord.textContent = oneEval.word;
+			thumb_up.classList.remove('is-invisible');
 			setTimeout(() => {
 				theShuffledWord.classList.remove('has-text-success');
 				guessInput.removeAttribute('disabled');
+				thumb_up.classList.add('is-invisible');
 				guessInput.focus();
 			}, defaultFeedbackTime);
 		}
@@ -289,9 +303,11 @@
 			guessInput.setAttribute('disabled', 'disabled');
 			theShuffledWord.classList.add('has-text-danger');
 			theShuffledWord.textContent = oneEval.word;
+			thumb_down.classList.remove('is-invisible');
 			setTimeout(() => {
 				theShuffledWord.classList.remove('has-text-danger');
 				guessInput.removeAttribute('disabled');
+				thumb_down.classList.add('is-invisible');
 				guessInput.focus();
 			}, defaultFeedbackTime);
 		}
