@@ -1,388 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description"
-		content="Shuffle words is a free simple game where you have to guess the word from the shuffled letters.">
-	<meta name="google-site-verification" content="QUDp38cQIHGVpvIHbQkOnqFyjdbq4CTGebRr2ra26OY" />
-	<link rel="icon" href="favicon.svg" />
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="stylesheet"
-		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-	<link rel="stylesheet"
-		href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
-	<title>Shuffle words</title>
-	<style>
-		:root {
-			font-size: 12pt;
-			--bulma-primary-h: 180deg;
-			--bulma-primary-s: 68%;
-			--bulma-primary-l: 53%;
-			--bulma-family-primary: Lato, Inter, SF Pro, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, Helvetica, Arial, sans-serif;
-		}
-		#shuffle {
-			letter-spacing: .5rem;
-		}
-		form {
-			align-items: end;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anagram Scramble Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Ensure hidden letters retain their space */
+        .invisible-letter {
+            opacity: 0;
+            pointer-events: none;
+        }
+        /* For fixed-width font for letters */
+        .font-mono-custom {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+    </style>
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-S2BFTQ6KZG"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-S2BFTQ6KZG');
-</script>
 <body>
-	<nav class="navbar" role="navigation" aria-label="main navigation">
-		<div class="navbar-brand">
-			<a class="navbar-item" href="#">
-				<h1>Shuffle words </h1>
-			</a>
-			<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-				data-target="navbarBasicExample">
-				<span aria-hidden="true"></span>
-				<span aria-hidden="true"></span>
-				<span aria-hidden="true"></span>
-				<span aria-hidden="true"></span>
-			</a>
-		</div>
-		<div id="navbarBasicExample" class="navbar-menu">
-			<div class="navbar-start">
-			</div>
-			<div class="navbar-end">
-				<div class="navbar-item">
-					<div class="buttons">
-					</div>
-				</div>
-			</div>
-		</div>
-	</nav>
-	<section class="hero is-small">
-		<div class="fixed-grid has-6-cols">
-		<div class="grid hero-body has-text-centered">
-			<span id="thumb-down" class="cell py-1 is-col-start-2 has-text-danger is-invisible material-symbols-outlined">
-				thumb_down
-			</span>
-			<div class="cell is-col-span-2">
-				<p class="title total-score is-size-3 is-family-monospace mb-0">0</p>
-				<p class="mt-0 is-size-7">your score</p>
-			</div>
-			<span id="thumb-up" class="cell py-1 has-text-success is-invisible material-symbols-outlined">
-				thumb_up
-			</span>
-		</div>
-		</div>
-	</section>
-	<section class="section pt-0">
-		<div class="container">
-			<div class="grid content">
-				<p id="shuffle" class="cell title is-1 has-text-centered"></p>
-			</div>
-			<div class="fixed-grid has-6-cols">
-				<form class="grid">
-					<label class="instructions cell is-col-span-6 is-size-6 has-text-centered" for="guess">
-						Guess the word above
-					</label>
-					<button id="reset" title="clear your input" class="cell button has-text-warning" type="reset" value="Reset">
-						<span class="material-symbols-outlined">
-							close
-						</span>
-					</button>
-					<input id="guess" type="text" class="input cell is-col-span-4 is-primary is-medium" placeholder="type your guess here" autocomplete="off" autofocus />
-					<button id="ok" title="submit your guess" class="cell button has-text-success" type="submit" value="OK">
-						<span class="material-symbols-outlined">
-							check
-						</span>
-					</button>
-				</form>
-			</div>
-			<div class="fixed-grid has-6-cols">
-				<div class="grid">
-					<label class="cell is-col-span-5 has-text-right" for="max-word-lenght-value">Set max word length
-						from <span class="min-length-info">0</span> to <span class="max-length-info">0</span>:
-					</label>
-					<input class="input is-info is-small cell is-col-span-1" id="max-word-lenght-value" type="number"
-						min="1" max="10" value="5" />
-				</div>
-			</div>
+    <div id="app"></div>
 
-			<div class="fixed-grid has-6-cols">
-				<div class="grid">
-					<div class="cell is-col-start-1	is-col-span-4">
-						<h2 class="title is-4 has-text-centered">Score board</h2>
-						<button class="clear-store button is-secondary">clear</button>
-						<template id="result-template">
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-						</template>
-						<table class="table is-fullwidth">
-							<thead>
-								<th>
-									date
-								</th>
-								<th>
-									your word
-								</th>
-								<th>
-									correct word
-								</th>
-								<th>
-									points
-								</th>
-							</thead>
-							<tbody>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<footer class="footer fixed-grid has-4-cols">
-		<div class="grid">
-		<img class="cell" src="https://app.greenweb.org/api/v3/greencheckimage/ezykyu.com?nocache=true" alt="This website runs on green hosting - verified by thegreenwebfoundation.org" width="200px" height="95px">
+    <script type="module">
+        const { createApp, ref, onMounted, onBeforeUnmount, computed } = Vue;
 
-		<div class="cell is-col-span-3 content has-text-centered">
-		  <p>
-			This software is provided as is. We use analytics to meter users’ behaviour. By using this website you agree with these statements.</a>
-		  </p>
-		</div>
-		</div>
-	</footer>	
-	<script>
-		// bulma navbar burger
-		document.addEventListener('DOMContentLoaded', () => {
+        const AnagramScrambleGame = {
+            name: 'AnagramScrambleGame',
+            template: `
+                <div class="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center p-4 font-inter">
+                    <div class="bg-white rounded-2xl shadow-xl p-6 md:p-10 w-full max-w-md text-center border border-gray-200">
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-6">
+                            Anagram Scramble
+                        </h1>
 
-			// Get all "navbar-burger" elements
-			const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+                        <div class="flex justify-between items-center mb-8 text-sm md:text-lg font-semibold text-gray-700 gap-4">
+                            <div class="bg-transparent border border-blue-500 text-blue-700 px-4 py-2 rounded-lg shadow-md w-28 h-16 flex flex-col justify-center items-center">
+                                <span class="text-xs">Score:</span>
+                                <span class="text-2xl font-mono-custom">{{ score }}</span>
+                            </div>
+                            <div class="bg-transparent border border-purple-500 text-purple-700 px-4 py-2 rounded-lg shadow-md w-28 h-16 flex flex-col justify-center items-center">
+                                <span class="text-xs">High Score:</span>
+                                <span class="text-2xl font-mono-custom">{{ highScore }}</span>
+                            </div>
+                            <div :class="\`px-4 py-2 rounded-lg shadow-md w-28 h-16 flex flex-col justify-center items-center bg-transparent border \${timer <= 10 ? 'border-red-500 text-red-700 animate-pulse' : 'border-green-500 text-green-700'}\`">
+                                <span class="text-xs">Time:</span>
+                                <span class="text-2xl font-mono-custom">{{ timer }}</span>
+                            </div>
+                        </div>
 
-			// Add a click event on each of them
-			$navbarBurgers.forEach(el => {
-				el.addEventListener('click', () => {
+                        <div class="mb-6">
+                            <input
+                                type="text"
+                                :value="currentGuess"
+                                class="w-full p-2 text-center text-xl md:text-2xl font-semibold border-2 border-blue-400 rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                                readonly
+                            />
+                        </div>
 
-					// Get the target from the "data-target" attribute
-					const target = el.dataset.target;
-					const $target = document.getElementById(target);
+                        <div class="flex justify-center flex-wrap gap-3 mb-8 h-[8rem]">
+                            <button
+                                v-for="letterObj in scrambledLettersDisplay"
+                                :key="letterObj.id"
+                                @click="handleScrambledLetterClick(letterObj)"
+                                :disabled="!gameActive || isLetterUsed(letterObj.id)"
+                                :class="['h-[4rem] bg-blue-200 text-blue-800 text-2xl md:text-3xl font-bold px-4 py-0 rounded-xl shadow-md transform hover:scale-105 transition-all duration-200 font-mono-custom',
+                                    gameActive && isLetterUsed(letterObj.id) ? 'invisible-letter' : 'disabled:opacity-50 disabled:cursor-not-allowed'
+                                ]"
+                            >
+                                {{ letterObj.letter }}
+                            </button>
+                        </div>
 
-					// Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-					el.classList.toggle('is-active');
-					$target.classList.toggle('is-active');
+                        <p
+                            :class="\`text-lg md:text-xl font-bold mb-6 transition-colors duration-300 min-h-[3rem] text-wrap \${message ? (isCorrectGuess ? 'text-green-600' : 'text-red-600') : 'text-transparent'}\`"
+                        >
+                            {{ message || '&nbsp;' }}
+                        </p>
 
-				});
-			});
+                        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+                            <button
+                                v-if="!gameActive"
+                                @click="startGame"
+                                class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                            >
+                                Start Game
+                            </button>
+                            <template v-else>
+                                <button
+                                    @click="handleBackspaceClick"
+                                    class="bg-red-400 hover:bg-red-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z" />
+                                    </svg>
+                                </button>
+                                <button
+                                    @click="handleClearClick"
+                                    class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+                                >
+                                    Reset
+                                </button>
+                                <button
+                                    @click="handleGiveUp"
+                                    class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                >
+                                    Give Up
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            `,
+            setup() {
+                const wordList = ref([
+                    'APPLE', 'BANANA', 'ORANGE', 'GRAPE', 'STRAWBERRY', 'BLUEBERRY', 'KIWI',
+                    'PINEAPPLE', 'MANGO', 'PEACH', 'PLUM', 'CHERRY', 'LEMON', 'LIME',
+                    'AVOCADO', 'COCONUT', 'RASPBERRY', 'BLACKBERRY', 'WATERMELON', 'CANTALOUPE'
+                ]);
 
-		});
-	</script>
-	<script>
-		const defaultMaxWordLenght = 6;
-		const defaultFeedbackTime = 1200;
-		var theChosenWord = '';
-		var maxWordLength = parseInt(localStorage.getItem('maxWordLength')) || defaultMaxWordLenght;
-		var totalScore = parseInt(localStorage.getItem('totalScore')) || 0;
-		var oneEval = {date: null, guess: null, word: null, score: null};
-		var score = 0;
-		const guessInput = document.querySelector('#guess');
-		const maxWordLengthValue = document.querySelector('#max-word-lenght-value');
-		const totalScoreDsiplay = document.querySelector('.total-score');
-		const minLengthInfo = document.querySelector('.min-length-info');
-		const maxLengthInfo = document.querySelector('.max-length-info');
-		const theShuffledWord = document.querySelector('#shuffle');
-		const clearStoreBtn = document.querySelectorAll('.clear-store');
-		const theForm = document.querySelector('form');
-		const instructions = document.querySelector('.instructions');
-		const thumb_up = document.querySelector('#thumb-up');
-		const thumb_down = document.querySelector('#thumb-down');
-		maxWordLengthValue.value = maxWordLength;
+                const currentWord = ref('');
+                const scrambledLettersDisplay = ref([]);
+                const currentGuessLetters = ref([]);
+                const usedLetterIds = ref(new Set());
 
+                const currentGuess = computed(() => currentGuessLetters.value.map(l => l.letter).join(''));
 
+                const score = ref(0);
+                const highScore = ref(0);
+                const timer = ref(60);
+                const gameActive = ref(false);
+                const message = ref('');
+                const isCorrectGuess = ref(false);
+                let timerInterval = null;
 
+                const isLetterUsed = (id) => usedLetterIds.value.has(id);
 
-		document.addEventListener('DOMContentLoaded', () => {
-			replaceSubmit();
-			resetWord();
-			calculateWordLength(listOfWords);
-			totalScoreDsiplay.textContent = totalScore;
-			populateTable();
-		});
+                const shuffleWordWithIds = (word) => {
+                    const letters = word.split('').map((char, index) => ({ letter: char, id: index }));
+                    for (let i = letters.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [letters[i], letters[j]] = [letters[j], letters[i]];
+                    }
+                    return letters;
+                };
 
-		const expFunc = (x) => {
-  			return Math.pow(x, 2);
-		}
+                const pickNewWord = () => {
+                    const randomIndex = Math.floor(Math.random() * wordList.value.length);
+                    const newWord = wordList.value[randomIndex];
+                    currentWord.value = newWord;
+                    const shuffled = shuffleWordWithIds(newWord);
+                    scrambledLettersDisplay.value = [...shuffled];
+                    currentGuessLetters.value = [];
+                    usedLetterIds.value.clear();
+                    message.value = '';
+                    isCorrectGuess.value = false;
+                };
 
+                const startGame = () => {
+                    score.value = 0;
+                    timer.value = 60;
+                    gameActive.value = true;
+                    pickNewWord();
 
-		const calculateWordLength = (listOfWords) => {
-			const smallestWord = listOfWords.reduce((acc, word) => {
-				return word.length < acc.length ? word : acc;
-			}, listOfWords[0]).length;
-			const longestWord = listOfWords.reduce((acc, word) => {
-				return word.length > acc.length ? word : acc;
-			}, listOfWords[0]).length;
-			console.log(smallestWord + ' ' + longestWord);
-			maxWordLengthValue.min = minLengthInfo.textContent = smallestWord;
-			maxWordLengthValue.max = maxLengthInfo.textContent = longestWord;
-			maxWordLengthValue.value = maxWordLength;
-		};
+                    if (timerInterval) {
+                        clearInterval(timerInterval);
+                    }
+                    timerInterval = setInterval(() => {
+                        if (timer.value <= 1) {
+                            clearInterval(timerInterval);
+                            gameActive.value = false;
+                            message.value = `Time's up! The word was "${currentWord.value}". Your final score: ${score.value}`;
+                            saveHighScores();
+                            timer.value = 0;
+                        } else {
+                            timer.value--;
+                        }
+                    }, 1000);
+                };
 
-		const resetWord = () => {
-			theChosenWord = chooseARandomWord();
-			console.log(theChosenWord);
-			theShuffledWord.textContent = shuffle(theChosenWord);
-			guessInput.value = '';
-			instructions.textContent = 'Guess the word above for ' + expFunc(theChosenWord.length) + ' points!';
-		};
-		maxWordLengthValue.addEventListener('change', (event) => {
-			console.log(event.target.value);
-			maxWordLength = event.target.value;
-			localStorage.setItem('maxWordLength', maxWordLength);
-			resetWord();
-		});
+                const handleGuess = () => {
+                    if (!gameActive.value) return;
 
-		clearStoreBtn.forEach(btn => {
-			btn.addEventListener('click', () => {
-				document.querySelector('tbody').innerHTML = '';
-				localStorage.removeItem('evals');
-				localStorage.removeItem('totalScore');
-				totalScore = 0;
-				totalScoreDsiplay.textContent = totalScore;
-				maxWordLength = defaultMaxWordLenght;
-				oneEval = {date: null, guess: null, word: null, score: null};
-			});
-		});
+                    if (currentGuess.value.toUpperCase() === currentWord.value) {
+                        score.value += 10;
+                        message.value = 'Correct! Well done!';
+                        isCorrectGuess.value = true;
+                        saveHighScores();
+                        setTimeout(() => {
+                            pickNewWord();
+                            timer.value = 60;
+                        }, 1000);
+                    } else {
+                        message.value = 'Incorrect, try again!';
+                        isCorrectGuess.value = false;
+                    }
+                };
 
-		const replaceSubmit = () => {
-			theForm.addEventListener('submit', (event) => {
-				event.preventDefault();
-				evaluateGuess(event);
-			}, false);
-		};
-			
-		const shuffle = (str) => {
-			let i = 10;
-			const arr = str.split('');
-			let shuffledStr = str;
-			while (shuffledStr === str && i > 0) {
+                const loadHighScores = () => {
+                    const storedHighScore = localStorage.getItem('wordGameHighScore');
+                    if (storedHighScore) {
+                        highScore.value = parseInt(storedHighScore, 10);
+                    }
+                };
 
-				for (let i = arr.length - 1; i > 0; i--) {
-					const j = Math.floor(Math.random() * (i + 1));
-					[arr[i], arr[j]] = [arr[j], arr[i]];
-				}
-				shuffledStr = arr.join('');
-				--i;
-			}
-			return shuffledStr;
-		};
-		const showSuccess = () => {
-			guessInput.value = '';
-			guessInput.setAttribute('disabled', 'disabled');
-			theShuffledWord.classList.add('has-text-success');
-			theShuffledWord.textContent = oneEval.word;
-			thumb_up.classList.remove('is-invisible');
-			setTimeout(() => {
-				theShuffledWord.classList.remove('has-text-success');
-				guessInput.removeAttribute('disabled');
-				thumb_up.classList.add('is-invisible');
-				guessInput.focus();
-			}, defaultFeedbackTime);
-		}
-		const showFailure = () => {
-			guessInput.value = '';
-			guessInput.setAttribute('disabled', 'disabled');
-			theShuffledWord.classList.add('has-text-danger');
-			theShuffledWord.textContent = oneEval.word;
-			thumb_down.classList.remove('is-invisible');
-			setTimeout(() => {
-				theShuffledWord.classList.remove('has-text-danger');
-				guessInput.removeAttribute('disabled');
-				thumb_down.classList.add('is-invisible');
-				guessInput.focus();
-			}, defaultFeedbackTime);
-		}
+                const saveHighScores = () => {
+                    if (score.value > highScore.value) {
+                        highScore.value = score.value;
+                        localStorage.setItem('wordGameHighScore', highScore.value);
+                    }
+                };
 
-		const chooseARandomWord = () => {
-			var randomIndex = Math.floor(Math.random() * listOfWords.length);
-			while (listOfWords[randomIndex].length > maxWordLength) {
-				randomIndex = Math.floor(Math.random() * listOfWords.length);
-			}
-			return listOfWords[randomIndex];
-		};
-		const rate = (guessed = false) => {
-			score = guessed ? 1 * expFunc(oneEval.word.length) : -1 * expFunc(oneEval.word.length);
-			// score = guessed ? 1 * oneEval.word.length : -1 * oneEval.word.length;
-			oneEval.score = score;
-			totalScore += oneEval.score;
-			console.log('score: ', score,' totalScore: ', totalScore);
-			addScoreBoard(guessed, oneEval.date, oneEval.guess, oneEval.word, score);
-		}
-		const addScoreBoard = (guessed, date, aWord, theWord, score) => {
-			const template = document.querySelector('#result-template');
-			const clone = template.content.cloneNode(true);
-			const tr = clone.querySelector('tr');
+                const handleKeyDown = (event) => {
+                    if (event.key === 'Enter') {
+                        handleGuess();
+                    } else if (event.key === 'Backspace') {
+                        handleBackspaceClick();
+                    }
+                };
 
-			const tds = tr.querySelectorAll('td');
-			tds[0].textContent = date.substring(0, 10);
-			if (!guessed) tds[0].classList.add('has-text-danger');
-			tds[1].textContent = aWord;
-			if (!guessed) tds[1].classList.add('has-text-danger');
-			tds[2].textContent = theWord;
-			if (!guessed) tds[2].classList.add('has-text-success');
-			tds[3].textContent = score;
-			if (!guessed) tds[3].classList.add('has-text-danger');
-			document.querySelector('tbody').prepend(tr);
+                const handleScrambledLetterClick = (letterObj) => {
+                    if (gameActive.value && !isLetterUsed(letterObj.id)) {
+                        currentGuessLetters.value.push(letterObj);
+                        usedLetterIds.value.add(letterObj.id);
+                        if (currentGuess.value.length === currentWord.value.length) {
+                            handleGuess();
+                        }
+                    }
+                };
 
-		}
-		const pushOneEval = (eval) => {
-			let evals = JSON.parse(localStorage.getItem('evals')) || [];
-			evals.push(eval);
-			localStorage.setItem('evals', JSON.stringify(evals));
-		}
-		const getEvals = () => {
-			return JSON.parse(localStorage.getItem('evals')) || [];
-		}
-		const populateTable = () => {
-			const evals = getEvals();
-			evals.forEach(eval => {
-				addScoreBoard((eval.word == eval.guess ? true : false), eval.date, eval.word, eval.guess, eval.score);
-			});
-		}
+                const handleBackspaceClick = () => {
+                    if (gameActive.value && currentGuessLetters.value.length > 0) {
+                        const lastLetter = currentGuessLetters.value.pop();
+                        usedLetterIds.value.delete(lastLetter.id);
+                    }
+                };
 
-		const evaluateGuess = (event) => {
-			oneEval.date = new Date().toISOString();
-			oneEval.guess = guessInput.value.trim();
-			oneEval.word = theChosenWord;
-			// console.log(theChosenWord + ' ' + guessInput.value);
-			if (oneEval.word.toUpperCase() === oneEval.guess.toUpperCase()) {
-				rate(true);
-				showSuccess();
-			} else {
-				rate(false);
-				showFailure();
-			}
-			pushOneEval(oneEval);
+                const handleClearClick = () => {
+                    if (gameActive.value && currentGuessLetters.value.length > 0) {
+                        currentGuessLetters.value = [];
+                        usedLetterIds.value.clear();
+                    }
+                };
 
-			// update total score
-			totalScoreDsiplay.textContent = totalScore;
-			localStorage.setItem('totalScore', totalScore);
-			setTimeout(() => {
-				console.log('reset word');
-				resetWord();
-			}, defaultFeedbackTime);
-		};
-	</script>
-	<script src="list-of-words-en.js"></script>
+                const handleGiveUp = () => {
+                    if (!gameActive.value) return;
+
+                    clearInterval(timerInterval);
+                    gameActive.value = false;
+                    message.value = `You gave up! The correct word was "${currentWord.value}".`;
+                    isCorrectGuess.value = false;
+                    saveHighScores();
+                };
+
+                onMounted(() => {
+                    loadHighScores();
+                    window.addEventListener('keydown', handleKeyDown);
+                });
+
+                onBeforeUnmount(() => {
+                    if (timerInterval) {
+                        clearInterval(timerInterval);
+                    }
+                    window.removeEventListener('keydown', handleKeyDown);
+                });
+
+                return {
+                    score,
+                    highScore,
+                    timer,
+                    scrambledLettersDisplay,
+                    currentGuess,
+                    message,
+                    isCorrectGuess,
+                    gameActive,
+                    startGame,
+                    handleScrambledLetterClick,
+                    handleBackspaceClick,
+                    handleClearClick,
+                    handleGiveUp,
+                    isLetterUsed
+                };
+            }
+        };
+
+        createApp(AnagramScrambleGame).mount('#app');
+    </script>
 </body>
-
 </html>

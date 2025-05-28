@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+		content="Shuffle words is a free simple game where you have to guess the word from the shuffled letters.">
+	<meta name="google-site-verification" content="QUDp38cQIHGVpvIHbQkOnqFyjdbq4CTGebRr2ra26OY" />
+	<link rel="icon" href="favicon.svg" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+	<title>Shuffle words</title>
+	<style>
+		:root {
+			font-size: 12pt;
+			--bulma-primary-h: 180deg;
+			--bulma-primary-s: 68%;
+			--bulma-primary-l: 53%;
+			--bulma-family-primary: Lato, Inter, SF Pro, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, Helvetica, Arial, sans-serif;
+		}
+		#shuffle {
+			letter-spacing: .5rem;
+		}
+		form {
+			align-items: end;
+		}
+	</style>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S2BFTQ6KZG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-S2BFTQ6KZG');
+</script>
+<body>
+	<nav class="navbar" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a class="navbar-item" href="#">
+				<h1>Shuffle words </h1>
+			</a>
+			<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+				data-target="navbarBasicExample">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
+		</div>
+		<div id="navbarBasicExample" class="navbar-menu">
+			<div class="navbar-start">
+			</div>
+			<div class="navbar-end">
+				<div class="navbar-item">
+					<div class="buttons">
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<section class="hero is-small">
+		<div class="fixed-grid has-6-cols">
+		<div class="grid hero-body has-text-centered">
+			<span id="thumb-down" class="cell py-1 is-col-start-2 has-text-danger is-invisible material-symbols-outlined">
+				thumb_down
+			</span>
+			<div class="cell is-col-span-2">
+				<p class="title total-score is-size-3 is-family-monospace mb-0">0</p>
+				<p class="mt-0 is-size-7">your score</p>
+			</div>
+			<span id="thumb-up" class="cell py-1 has-text-success is-invisible material-symbols-outlined">
+				thumb_up
+			</span>
+		</div>
+		</div>
+	</section>
+	<section class="section pt-0">
+		<div class="container">
+			<div class="grid content">
+				<p id="shuffle" class="cell title is-1 has-text-centered"></p>
+			</div>
+			<div class="fixed-grid has-6-cols">
+				<form class="grid">
+					<label class="instructions cell is-col-span-6 is-size-6 has-text-centered" for="guess">
+						Guess the word above
+					</label>
+					<button id="reset" title="clear your input" class="cell button has-text-warning" type="reset" value="Reset">
+						<span class="material-symbols-outlined">
+							close
+						</span>
+					</button>
+					<input id="guess" type="text" class="input cell is-col-span-4 is-primary is-medium" placeholder="type your guess here" autocomplete="off" autofocus />
+					<button id="ok" title="submit your guess" class="cell button has-text-success" type="submit" value="OK">
+						<span class="material-symbols-outlined">
+							check
+						</span>
+					</button>
+				</form>
+			</div>
+			<div class="fixed-grid has-6-cols">
+				<div class="grid">
+					<label class="cell is-col-span-5 has-text-right" for="max-word-lenght-value">Set max word length
+						from <span class="min-length-info">0</span> to <span class="max-length-info">0</span>:
+					</label>
+					<input class="input is-info is-small cell is-col-span-1" id="max-word-lenght-value" type="number"
+						min="1" max="10" value="5" />
+				</div>
+			</div>
+
+			<div class="fixed-grid has-6-cols">
+				<div class="grid">
+					<div class="cell is-col-start-1	is-col-span-4">
+						<h2 class="title is-4 has-text-centered">Score board</h2>
+						<button class="clear-store button is-secondary">clear</button>
+						<template id="result-template">
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</template>
+						<table class="table is-fullwidth">
+							<thead>
+								<th>
+									date
+								</th>
+								<th>
+									your word
+								</th>
+								<th>
+									correct word
+								</th>
+								<th>
+									points
+								</th>
+							</thead>
+							<tbody>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<footer class="footer fixed-grid has-4-cols">
+		<div class="grid">
+		<img class="cell" src="https://app.greenweb.org/api/v3/greencheckimage/ezykyu.com?nocache=true" alt="This website runs on green hosting - verified by thegreenwebfoundation.org" width="200px" height="95px">
+
+		<div class="cell is-col-span-3 content has-text-centered">
+		  <p>
+			This software is provided as is. We use analytics to meter users’ behaviour. By using this website you agree with these statements.</a>
+		  </p>
+		</div>
+		</div>
+	</footer>	
+	<script>
+		// bulma navbar burger
+		document.addEventListener('DOMContentLoaded', () => {
+
+			// Get all "navbar-burger" elements
+			const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+			// Add a click event on each of them
+			$navbarBurgers.forEach(el => {
+				el.addEventListener('click', () => {
+
+					// Get the target from the "data-target" attribute
+					const target = el.dataset.target;
+					const $target = document.getElementById(target);
+
+					// Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+					el.classList.toggle('is-active');
+					$target.classList.toggle('is-active');
+
+				});
+			});
+
+		});
+	</script>
+	<script>
+		const defaultMaxWordLenght = 6;
+		const defaultFeedbackTime = 1200;
+		var theChosenWord = '';
+		var maxWordLength = parseInt(localStorage.getItem('maxWordLength')) || defaultMaxWordLenght;
+		var totalScore = parseInt(localStorage.getItem('totalScore')) || 0;
+		var oneEval = {date: null, guess: null, word: null, score: null};
+		var score = 0;
+		const guessInput = document.querySelector('#guess');
+		const maxWordLengthValue = document.querySelector('#max-word-lenght-value');
+		const totalScoreDsiplay = document.querySelector('.total-score');
+		const minLengthInfo = document.querySelector('.min-length-info');
+		const maxLengthInfo = document.querySelector('.max-length-info');
+		const theShuffledWord = document.querySelector('#shuffle');
+		const clearStoreBtn = document.querySelectorAll('.clear-store');
+		const theForm = document.querySelector('form');
+		const instructions = document.querySelector('.instructions');
+		const thumb_up = document.querySelector('#thumb-up');
+		const thumb_down = document.querySelector('#thumb-down');
+		maxWordLengthValue.value = maxWordLength;
+
+
+
+
+		document.addEventListener('DOMContentLoaded', () => {
+			replaceSubmit();
+			resetWord();
+			calculateWordLength(listOfWords);
+			totalScoreDsiplay.textContent = totalScore;
+			populateTable();
+		});
+
+		const expFunc = (x) => {
+  			return Math.pow(x, 2);
+		}
+
+
+		const calculateWordLength = (listOfWords) => {
+			const smallestWord = listOfWords.reduce((acc, word) => {
+				return word.length < acc.length ? word : acc;
+			}, listOfWords[0]).length;
+			const longestWord = listOfWords.reduce((acc, word) => {
+				return word.length > acc.length ? word : acc;
+			}, listOfWords[0]).length;
+			console.log(smallestWord + ' ' + longestWord);
+			maxWordLengthValue.min = minLengthInfo.textContent = smallestWord;
+			maxWordLengthValue.max = maxLengthInfo.textContent = longestWord;
+			maxWordLengthValue.value = maxWordLength;
+		};
+
+		const resetWord = () => {
+			theChosenWord = chooseARandomWord();
+			console.log(theChosenWord);
+			theShuffledWord.textContent = shuffle(theChosenWord);
+			guessInput.value = '';
+			instructions.textContent = 'Guess the word above for ' + expFunc(theChosenWord.length) + ' points!';
+		};
+		maxWordLengthValue.addEventListener('change', (event) => {
+			console.log(event.target.value);
+			maxWordLength = event.target.value;
+			localStorage.setItem('maxWordLength', maxWordLength);
+			resetWord();
+		});
+
+		clearStoreBtn.forEach(btn => {
+			btn.addEventListener('click', () => {
+				document.querySelector('tbody').innerHTML = '';
+				localStorage.removeItem('evals');
+				localStorage.removeItem('totalScore');
+				totalScore = 0;
+				totalScoreDsiplay.textContent = totalScore;
+				maxWordLength = defaultMaxWordLenght;
+				oneEval = {date: null, guess: null, word: null, score: null};
+			});
+		});
+
+		const replaceSubmit = () => {
+			theForm.addEventListener('submit', (event) => {
+				event.preventDefault();
+				evaluateGuess(event);
+			}, false);
+		};
+			
+		const shuffle = (str) => {
+			let i = 10;
+			const arr = str.split('');
+			let shuffledStr = str;
+			while (shuffledStr === str && i > 0) {
+
+				for (let i = arr.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[arr[i], arr[j]] = [arr[j], arr[i]];
+				}
+				shuffledStr = arr.join('');
+				--i;
+			}
+			return shuffledStr;
+		};
+		const showSuccess = () => {
+			guessInput.value = '';
+			guessInput.setAttribute('disabled', 'disabled');
+			theShuffledWord.classList.add('has-text-success');
+			theShuffledWord.textContent = oneEval.word;
+			thumb_up.classList.remove('is-invisible');
+			setTimeout(() => {
+				theShuffledWord.classList.remove('has-text-success');
+				guessInput.removeAttribute('disabled');
+				thumb_up.classList.add('is-invisible');
+				guessInput.focus();
+			}, defaultFeedbackTime);
+		}
+		const showFailure = () => {
+			guessInput.value = '';
+			guessInput.setAttribute('disabled', 'disabled');
+			theShuffledWord.classList.add('has-text-danger');
+			theShuffledWord.textContent = oneEval.word;
+			thumb_down.classList.remove('is-invisible');
+			setTimeout(() => {
+				theShuffledWord.classList.remove('has-text-danger');
+				guessInput.removeAttribute('disabled');
+				thumb_down.classList.add('is-invisible');
+				guessInput.focus();
+			}, defaultFeedbackTime);
+		}
+
+		const chooseARandomWord = () => {
+			var randomIndex = Math.floor(Math.random() * listOfWords.length);
+			while (listOfWords[randomIndex].length > maxWordLength) {
+				randomIndex = Math.floor(Math.random() * listOfWords.length);
+			}
+			return listOfWords[randomIndex];
+		};
+		const rate = (guessed = false) => {
+			score = guessed ? 1 * expFunc(oneEval.word.length) : -1 * expFunc(oneEval.word.length);
+			// score = guessed ? 1 * oneEval.word.length : -1 * oneEval.word.length;
+			oneEval.score = score;
+			totalScore += oneEval.score;
+			console.log('score: ', score,' totalScore: ', totalScore);
+			addScoreBoard(guessed, oneEval.date, oneEval.guess, oneEval.word, score);
+		}
+		const addScoreBoard = (guessed, date, aWord, theWord, score) => {
+			const template = document.querySelector('#result-template');
+			const clone = template.content.cloneNode(true);
+			const tr = clone.querySelector('tr');
+
+			const tds = tr.querySelectorAll('td');
+			tds[0].textContent = date.substring(0, 10);
+			if (!guessed) tds[0].classList.add('has-text-danger');
+			tds[1].textContent = aWord;
+			if (!guessed) tds[1].classList.add('has-text-danger');
+			tds[2].textContent = theWord;
+			if (!guessed) tds[2].classList.add('has-text-success');
+			tds[3].textContent = score;
+			if (!guessed) tds[3].classList.add('has-text-danger');
+			document.querySelector('tbody').prepend(tr);
+
+		}
+		const pushOneEval = (eval) => {
+			let evals = JSON.parse(localStorage.getItem('evals')) || [];
+			evals.push(eval);
+			localStorage.setItem('evals', JSON.stringify(evals));
+		}
+		const getEvals = () => {
+			return JSON.parse(localStorage.getItem('evals')) || [];
+		}
+		const populateTable = () => {
+			const evals = getEvals();
+			evals.forEach(eval => {
+				addScoreBoard((eval.word == eval.guess ? true : false), eval.date, eval.word, eval.guess, eval.score);
+			});
+		}
+
+		const evaluateGuess = (event) => {
+			oneEval.date = new Date().toISOString();
+			oneEval.guess = guessInput.value.trim();
+			oneEval.word = theChosenWord;
+			// console.log(theChosenWord + ' ' + guessInput.value);
+			if (oneEval.word.toUpperCase() === oneEval.guess.toUpperCase()) {
+				rate(true);
+				showSuccess();
+			} else {
+				rate(false);
+				showFailure();
+			}
+			pushOneEval(oneEval);
+
+			// update total score
+			totalScoreDsiplay.textContent = totalScore;
+			localStorage.setItem('totalScore', totalScore);
+			setTimeout(() => {
+				console.log('reset word');
+				resetWord();
+			}, defaultFeedbackTime);
+		};
+	</script>
+	<script src="list-of-words-en.js"></script>
+</body>
+
+</html>
